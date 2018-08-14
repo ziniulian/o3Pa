@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<title>域名管理</title>
+		<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, minimum-scale=1.0" />
+		<meta charset="utf-8" />
+		<script type="text/javascript" src="/myLib/LZR.js"></script>
+		<script type="text/javascript" src="/tools.js"></script>
+		<script type="text/javascript" src="js/index.js"></script>
+		<link rel="stylesheet" href="/base.css">
+
+		<style type="text/css">
+			tr {
+				text-align: left;
+			}
+			td {
+				word-break:break-all;
+			}
+			input {
+				width: 100%;
+			}
+		</style>
+	</head>
+
+	<body>
+		<div id="boso" class="boso">
+			<div class="logo">
+				<a name="dmad_io_home" class="logohome" target="_blank"></a>
+				<table>
+					<tbody>
+						<tr>
+							<td width="25%">
+								<input id="idDom" type="text" placeholder="请输入ID" onfocus="this.select();"></input>
+							</td>
+							<td width="1.5%"/>
+							<td>
+								<input id="urlDom" type="text" placeholder="请输入URL，并按回车键添加" onfocus="this.select();"></input>
+							</td>
+						</tr>
+					</tbody>
+				</table>
+			</div>
+			<div>
+				<table>
+					<tbody>
+						<tr>
+							<td width="24%">
+								<input id="keyDom" type="text" placeholder="ID查询" onfocus="this.select();"></input>
+							</td>
+							<td width="1%"/>
+							<td width="60%">
+								<input id="vDom" type="text" placeholder="URL查询" onfocus="this.select();"></input>
+							</td>
+							<td width="15%" class="c">
+								<a href="javascript: dat.clear();">重置</a>
+							</td>
+						</tr>
+					</tbody>
+				</table>
+			</div>
+			<br />
+			<div class="c">
+				<a name="preDom" href="javascript: dat.db.pre();">上一页</a>
+				&nbsp;&nbsp;&nbsp;
+				<a name="nextDom" href="javascript: dat.db.next();">下一页</a>
+			</div>
+			<br />
+			<div>
+				<table>
+					<tbody>
+						<tr>
+							<th width="25%">ID</th>
+							<th width="60%">URL</th>
+							<th width="15%" />
+						</tr>
+					</tbody>
+					<tbody id="tbs"></tbody>
+				</table>
+			</div>
+			<br />
+			<div class="c">
+				<a name="preDom" href="javascript: dat.db.pre();">上一页</a>
+				&nbsp;&nbsp;&nbsp;
+				<a name="nextDom" href="javascript: dat.db.next();">下一页</a>
+			</div>
+			<div id="mark" class="Lc_nosee"><br /><br />请稍候 ...<br /><br /><a href="javascript: dat.db.showMark(false);">取消</a></div>
+		</div>
+	</body>
+
+	<script type="text/javascript">
+		document.body.onload = init;
+	</script>
+</html>
