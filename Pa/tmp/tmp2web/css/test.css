@@ -1,0 +1,10 @@
+table {
+    width: 90%;
+    margin: 0 auto;
+}
+tr {
+    text-align: left;
+}
+td {
+    word-break:break-all;
+}

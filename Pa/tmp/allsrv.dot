@@ -1,0 +1,11 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<title>全部服务</title>
+	</head>
+	<frameset rows="*,*,*,*,*,*,*,*,*,*,*,*" cols="*,*,*,*,*,*">
+		{{~it.comDbSrvReturn:o:i}}
+			<frame src="{{=o.url}}" />
+		{{~}}
+	</frameset>
+</html>

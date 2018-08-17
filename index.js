@@ -40,7 +40,7 @@ srv.ro.get("/myNam/", function (req, res) {
 });
 
 // 爬虫
-// srv.use("/Pa/", require("./Pa"));
+srv.use("/Pa/", require("./Pa"));
 
 // 收尾处理
 srv.use("*", function (req, res) {

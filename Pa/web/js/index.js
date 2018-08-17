@@ -22,11 +22,14 @@ var dat = {
 		dat.db.mark.doe = document.getElementById("mark");
 		dat.db.evt.qryb.add(function (o) {
 			tbs.innerHTML = "";
-			if (keyDom.value) {
-				o.idLike = keyDom.value;
+			if (idQlDom.value) {
+				o.idLike = idQlDom.value;
 			}
-			if (vDom.value) {
-				o.urlLike = vDom.value;
+			if (urlQlDom.value) {
+				o.urlLike = urlQlDom.value;
+			}
+			if (namQlDom.value) {
+				o.namLike = namQlDom.value;
 			}
 		});
 		dat.db.evt.qryr.add(function (o) {
@@ -41,15 +44,36 @@ var dat = {
 		var d = document.createElement("td");
 		var s = document.createElement("a");
 
-		// 键
-		s.href = "javascript: dat.set('" + o.id + "', '" + o.url + "');";
+		// 项目名
+		s.href = "javascript: dat.set('" + o.id + "', '" + o.url + "', '" + o.nam + "');";
 		s.innerHTML = o.id;
 		d.appendChild(s);
 		r.appendChild(d);
 
-		// 值
+		// 域名
 		d = document.createElement("td");
+		d.className = "l";
 		d.innerHTML = o.url;
+		r.appendChild(d);
+
+		// 校验字
+		d = document.createElement("td");
+		d.innerHTML = o.nam;
+		r.appendChild(d);
+
+		// 状态
+		d = document.createElement("td");
+		if (o.stu) {
+			d.innerHTML = o.stu;
+		}
+		r.appendChild(d);
+
+		// 时间
+		d = document.createElement("td");
+		d.className = "l";
+		if (o.tim) {
+			d.innerHTML = o.tim;
+		}
 		r.appendChild(d);
 
 		// 删除
@@ -57,7 +81,6 @@ var dat = {
 		s = document.createElement("a");
 		s.href = "javascript: dat.db.del({id:\"" + o.id + "\"});";
 		s.innerHTML = "删除";
-		d.className = "c";
 		d.appendChild(s);
 		r.appendChild(d);
 
@@ -67,37 +90,46 @@ var dat = {
 	add: function () {
 		var id = idDom.value;
 		var url = urlDom.value;
+		var nam = namDom.value;
 		if (!id) {
 			idDom.focus();
 		} else if (!url) {
 			urlDom.focus();
+		} else if (!nam) {
+			namDom.focus();
 		} else {
 			dat.db.meg ({
-				"id": id, "url": url
+				"id": id,
+				"url": url,
+				"nam": nam
 			}, id);
 			idDom.value = "";
 			urlDom.value = "";
+			namDom.value = "";
 			idDom.focus();
 		}
 	},
 
-	set: function (id, url) {
+	set: function (id, url, nam) {
 		idDom.value = id;
 		urlDom.value = url;
+		namDom.value = nam;
 		urlDom.focus();
 	},
 
 	clear: function () {
 		var b = 2;
-		if (keyDom.value || vDom.value) {
+		if (idQlDom.value || urlQlDom.value || namQlDom.value) {
 			b = 1;
-		} else if (idDom.value || urlDom.value) {
+		} else if (idDom.value || urlDom.value || namDom.value) {
 			b = 0;
 		}
-		keyDom.value = "";
-		vDom.value = "";
+		idQlDom.value = "";
+		urlQlDom.value = "";
+		namQlDom.value = "";
 		idDom.value = "";
 		urlDom.value = "";
+		namDom.value = "";
 		if (b === 1) {
 			dat.db.first();
 		} else if (b === 2) {
@@ -111,13 +143,19 @@ function init() {
 	lzr_tools.getDomains("io_home");
 	dat.initDb();
 
-	keyDom.onkeyup = function (e) {
+	idQlDom.onkeyup = function (e) {
 		if (e.keyCode === 13) {		// 回车键
 			dat.db.first();
 		}
 	};
 
-	vDom.onkeyup = function (e) {
+	urlQlDom.onkeyup = function (e) {
+		if (e.keyCode === 13) {		// 回车键
+			dat.db.first();
+		}
+	};
+
+	namQlDom.onkeyup = function (e) {
 		if (e.keyCode === 13) {		// 回车键
 			dat.db.first();
 		}
@@ -130,6 +168,12 @@ function init() {
 	};
 
 	urlDom.onkeyup = function (e) {
+		if (e.keyCode === 13) {		// 回车键
+			namDom.focus();
+		}
+	};
+
+	namDom.onkeyup = function (e) {
 		if (e.keyCode === 13) {		// 回车键
 			dat.add();
 		}

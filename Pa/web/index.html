@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html>
 	<head>
-		<title>域名管理</title>
+		<title>爬虫项目管理</title>
 		<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, minimum-scale=1.0" />
 		<meta charset="utf-8" />
 		<script type="text/javascript" src="/myLib/LZR.js"></script>
@@ -11,7 +11,7 @@
 
 		<style type="text/css">
 			tr {
-				text-align: left;
+				text-align: center;
 			}
 			td {
 				word-break:break-all;
@@ -29,12 +29,16 @@
 				<table>
 					<tbody>
 						<tr>
-							<td width="25%">
-								<input id="idDom" type="text" placeholder="请输入ID" onfocus="this.select();"></input>
+							<td width="15%">
+								<input id="idDom" type="text" placeholder="项目名" onfocus="this.select();"></input>
 							</td>
 							<td width="1.5%"/>
 							<td>
-								<input id="urlDom" type="text" placeholder="请输入URL，并按回车键添加" onfocus="this.select();"></input>
+								<input id="urlDom" type="text" placeholder="域名" onfocus="this.select();"></input>
+							</td>
+							<td width="1.5%"/>
+							<td width="15%">
+								<input id="namDom" type="text" placeholder="校验字" onfocus="this.select();"></input>
 							</td>
 						</tr>
 					</tbody>
@@ -44,12 +48,16 @@
 				<table>
 					<tbody>
 						<tr>
-							<td width="24%">
-								<input id="keyDom" type="text" placeholder="ID查询" onfocus="this.select();"></input>
+							<td width="15%">
+								<input id="idQlDom" type="text" placeholder="项目名查询" onfocus="this.select();"></input>
 							</td>
 							<td width="1%"/>
-							<td width="60%">
-								<input id="vDom" type="text" placeholder="URL查询" onfocus="this.select();"></input>
+							<td>
+								<input id="urlQlDom" type="text" placeholder="域名查询" onfocus="this.select();"></input>
+							</td>
+							<td width="1%"/>
+							<td width="15%">
+								<input id="namQlDom" type="text" placeholder="校验字查询" onfocus="this.select();"></input>
 							</td>
 							<td width="15%" class="c">
 								<a href="javascript: dat.clear();">重置</a>
@@ -69,9 +77,12 @@
 				<table>
 					<tbody>
 						<tr>
-							<th width="25%">ID</th>
-							<th width="60%">URL</th>
-							<th width="15%" />
+							<th width="10%">项目名</th>
+							<th width="40%">域名</th>
+							<th width="10%">校验字</th>
+							<th width="10%">状态</th>
+							<th width="20%">时间</th>
+							<th width="10%" />
 						</tr>
 					</tbody>
 					<tbody id="tbs"></tbody>

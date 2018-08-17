@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<title>服务刷新</title>
+		{{#def.meta}}
+		<link rel="stylesheet" href="/base.css">
+		<link rel="stylesheet" href="tmp2web/css/test.css">
+	</head>
+
+	<body>
+		<div id="boso" class="boso">
+			<div class="logo">
+				<a class="logohome" target="_blank" href="{{=it.dms.io_home || ''}}"></a>
+			</div>
+			<div>共 {{=it.comDbSrvReturn.length}} 个服务</div>
+			<div>
+				<table>
+					<tbody>
+						<tr>
+							<th width="40%">项目名</th>
+							<th width="20%">状态</th>
+							<th width="40%">时间</th>
+						</tr>
+					</tbody>
+					<tbody>
+						{{~it.comDbSrvReturn:o:i}}
+							<tr>
+								<td>
+									<a target="_blank" href="{{=o.url}}">{{=o.nam}}</a>
+								</td>
+								<td>{{=o.stu || ''}}</td>
+								<td>{{=o.tim || ''}}</td>
+							</tr>
+						{{~}}
+					</tbody>
+				</table>
+			</div>
+		</div>
+	</body>
+
+</html>

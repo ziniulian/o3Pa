@@ -9,38 +9,31 @@ var curPath = require.resolve("./index.js").replace("index.js", "");
 // LZR 子模块加载
 LZR.load([
 	"LZR.Node.Srv.Result",
-	"LZR.Node.Srv.ComDbSrv"
+	"LZR.Node.Srv.ComDbSrv",
+	"LZR.Node.Srv.DomainSrv"
 ]);
 var clsR = LZR.Node.Srv.Result;
 
 // 常用数据库
-var cmdb = new LZR.Node.Srv.ComDbSrv ();
+var cmdb = new LZR.Node.Srv.ComDbSrv ({
+	logAble: 7
+});
 cmdb.initDb(
 	(process.env.OPENSHIFT_MONGODB_DB_URL || "mongodb://localhost:27017/test"),
-	"domain"
+	"pa"
 );
 
-// 添加特殊的数据库查询
-cmdb.mdb.crtEvt({
-	getIds: {
-		tnam: "domain",
-		funs: {
-			find: ["<0>", {"_id":0}],
-			toArray: []
-		}
+// 域名
+var dms = new LZR.Node.Srv.DomainSrv();
+dms.initAjx();
+
+// 需要用到的工具
+var tools = {
+	// 刷新域名信息
+	flushDms: function () {
+		dms.get("vs,io_home");	// 注：逗号分隔不能有空格
 	}
-});
-cmdb.mdb.evt.getIds.add(function (r, req, res, next) {
-	if (r.length) {
-		var i, o = {};
-		for (i = 0; i < r.length; i ++) {
-			o[r[i].id] = r[i].url;
-		}
-		res.json(clsR.get(o));
-	} else {
-		res.json(clsR.get(null, "暂无数据"));
-	}
-});
+};
 
 // 创建路由
 var r = new LZR.Node.Router ({
@@ -48,24 +41,14 @@ var r = new LZR.Node.Router ({
 	path: curPath
 });
 
-// 开启日志
-r.get("/openLog/", function (req, res, next) {
-	if (cmdb.logAble === 0) {
-		cmdb.logAble = 7;
-		cmdb.initAjx();
-		res.send("正在开启日志 ...");
-	} else {
-		res.send("日志已开启!");
-	}
-});
+/************************* 服务 *****************************/
 
 // 解析 post 参数
 r.use("*", bodyParser.urlencoded({ extended: false }));
 
 // 获取域名
 r.post("/srvGet/", function (req, res, next) {
-	res.set({"Access-Control-Allow-Origin": "*"});	// 跨域
-	cmdb.mdb.qry("getIds", req, res, next, [{"id": {"$in": req.body.ids.split(",")}}]);
+	cmdb.get(req, res, next, {}, {"_id": 0});
 });
 
 // 分页查询域名
@@ -77,19 +60,25 @@ r.post("/srvQry/", function (req, res, next) {
 	if (req.body.urlLike) {
 		q.url = {"$regex": new RegExp(req.body.urlLike)};
 	}
+	if (req.body.namLike) {
+		q.nam = {"$regex": new RegExp(req.body.namLike)};
+	}
 	cmdb.qry( req, res, next, "id", req.body.id, q, {"_id": 0} );
 });
 
 // 添加或修改域名
 r.post("/srvMeg/", function (req, res, next) {
-	var d = req.body.id;
-	var u = req.body.url;
+	var d = req.body.id;	// 项目名
+	var u = req.body.url;	// 域名
+	var n = req.body.nam;	// 校验字
 	if (!d) {
 		res.json(clsR.get(0, "缺少 id", false));
 	} else if (!u) {
 		res.json(clsR.get(0, "缺少 url", false));
+	} else if (!n) {
+		res.json(clsR.get(0, "缺少 nam", false));
 	} else {
-		cmdb.meg(req, res, next, {"id":d}, {"url":u});
+		cmdb.meg(req, res, next, {"id":d}, {"url":u, "nam":n});
 	}
 });
 
@@ -97,5 +86,29 @@ r.post("/srvMeg/", function (req, res, next) {
 r.post("/srvDel/", function (req, res, next) {
 	cmdb.del(req, res, next, {"id":req.body.id});
 });
+
+// 刷新域名信息
+r.get("/srvFlushDms/", function (req, res, next) {
+	tools.flushDms();
+	res.json(clsR.get(dms.ds));
+});
+
+/************************* 模板 *****************************/
+
+// 模板预处理
+r.get("/v/allsrv/", function (req, res, next) {
+	req.qpobj = { dms: dms.ds };
+	cmdb.get(req, res, next, {}, {"_id": 0}, true);
+});
+r.get("/v/flush/", function (req, res, next) {
+	req.qpobj = { dms: dms.ds };
+	cmdb.get(req, res, next, {}, {"_id": 0}, true);
+});
+
+// 初始化模板
+r.initTmp("/v/");
+
+// 刷新域名信息
+tools.flushDms();
 
 module.exports = r;
