@@ -8,7 +8,7 @@
 		"mongodb": "2.2.x",
 		"iconv-lite": "0.4.x",
 		"body-parser": "1.17.x",
-		"lzr": "~1.2.0"
+		"lzr": "~1.2.2"
 	},
 	"devDependencies": {},
 	"scripts": {
