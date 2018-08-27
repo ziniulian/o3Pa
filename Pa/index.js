@@ -20,6 +20,16 @@ cmdb.initDb(
 	"pa"
 );
 
+// 数据库添加状态保存功能
+cmdb.mdb.crtEvt({
+	sav: {
+		tnam: "pa",
+		funs: {
+			update: [{id: "<0>"}, {$set: "<1>"}]
+		}
+	}
+});
+
 // 创建路由
 var r = new LZR.Node.Router ({
 	hd_web: "web",
@@ -51,7 +61,9 @@ var tools = {
 		init: function () {
 			tools.flush.ajx.evt.pa.add(tools.flush.hdrun);
 			tools.flush.ajx.err.pa.add(tools.flush.hdrun);
-			// TODO: 初始化记录访问时间的数据库事件
+
+			// 绑定数据库状态保存事件
+			cmdb.mdb.evt.sav.add(tools.flush.end);
 		},
 		getTim: function () {	// 获取时间间隔。一个 6小时 + 17小时 * 随机数 的动态时间间隔
 			return Math.round((6 + 17 * Math.random()) * 3600 * 1000);
@@ -65,11 +77,13 @@ var tools = {
 			tools.flush.ajx.qry("pa", null, null, null, [tools.flush.urls[tools.flush.id].url]);
 		},
 		hdrun: function (r) {
-			// 处理返回结果
 			var o = tools.flush.urls[tools.flush.id];
 			// console.log (tools.flush.id + " << " + o.id + " , " + o.nam + " , " + (r === o.nam));
-			// TODO: 数据库记录时间和状态
 
+			// 保存域名访问结果
+			cmdb.mdb.qry("sav", null, null, null, [o.id, {"stu": r === o.nam ? "OK" : "Err", "tim": Date.now()}]);
+		},
+		end: function () {
 			// 结束
 			tools.flush.id ++;
 			if (tools.flush.id < tools.flush.urls.length) {
@@ -141,7 +155,7 @@ r.get(/^\/v\/(allsrv|flush)\/$/i, function (req, res, next) {
 r.get("/v/flush/", function (req, res, next) {
 	if (req.qpobj && req.qpobj.comDbSrvReturn && req.qpobj.comDbSrvReturn.length > 0) {
 		if (tools.flush.lock) {
-			req.send("等一下 ...");
+			res.send("等一下 ...");
 		} else {
 			tools.flush.lock = true;
 			clearTimeout(tools.flush.timid);

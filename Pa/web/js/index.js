@@ -1,7 +1,8 @@
 // 域名管理
 
 LZR.load([
-	"LZR.HTML.Srv.ComDbQry"
+	"LZR.HTML.Srv.ComDbQry",
+	"LZR.Base.Time"
 ]);
 
 var dat = {
@@ -16,6 +17,9 @@ var dat = {
 			qry: "srvQry/"
 		}
 	}),
+
+	// 时间工具
+	timTool: new LZR.Base.Time(),
 
 	// 数据库初始化
 	initDb: function () {
@@ -72,7 +76,7 @@ var dat = {
 		d = document.createElement("td");
 		d.className = "l";
 		if (o.tim) {
-			d.innerHTML = o.tim;
+			d.innerHTML = dat.timTool.format(new Date(o.tim), "datetim");
 		}
 		r.appendChild(d);
 
