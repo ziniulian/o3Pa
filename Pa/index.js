@@ -41,7 +41,7 @@ var r = new LZR.Node.Router ({
 var tools = {
 	bodyParser: require("body-parser"),	// post 参数解析工具
 	clsR: LZR.Node.Srv.Result,		// 标准返回格式
-	utTim: LZR.getSingleton(LZR.Base.Json),	// 时间工具
+	utTim: LZR.getSingleton(LZR.Base.Time),	// 时间工具
 	tmpRo: new LZR.Node.Router.ComTmp({		// 常用模板
 		ro: r,
 		dmIds: "io_home"
