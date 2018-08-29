@@ -5,6 +5,7 @@ var curPath = require.resolve("./index.js").replace("index.js", "");
 
 // LZR 子模块加载
 LZR.load([
+	"LZR.Base.Time",
 	"LZR.Node.Srv.Result",
 	"LZR.Node.Srv.ComDbSrv",
 	"LZR.Node.Router.ComTmp",
@@ -40,6 +41,7 @@ var r = new LZR.Node.Router ({
 var tools = {
 	bodyParser: require("body-parser"),	// post 参数解析工具
 	clsR: LZR.Node.Srv.Result,		// 标准返回格式
+	utTim: LZR.getSingleton(LZR.Base.Json),	// 时间工具
 	tmpRo: new LZR.Node.Router.ComTmp({		// 常用模板
 		ro: r,
 		dmIds: "io_home"
@@ -81,7 +83,10 @@ var tools = {
 			// console.log (tools.flush.id + " << " + o.id + " , " + o.nam + " , " + (r === o.nam));
 
 			// 保存域名访问结果
-			cmdb.mdb.qry("sav", null, null, null, [o.id, {"stu": r === o.nam ? "OK" : "Err", "tim": Date.now()}]);
+			var t = new Date();
+			o.stu = (r === o.nam ? "OK" : "Err");
+			o.tim = tools.utTim.format(t, "datetim");
+			cmdb.mdb.qry("sav", null, null, null, [o.id, {"stu": o.stu, "tim": t.getTime()}]);
 		},
 		end: function () {
 			// 结束
