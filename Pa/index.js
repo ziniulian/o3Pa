@@ -68,7 +68,7 @@ var tools = {
 			cmdb.mdb.evt.sav.add(tools.flush.end);
 		},
 		getTim: function () {	// 获取时间间隔。一个 6小时 + 17小时 * 随机数 的动态时间间隔
-			return Math.round((6 + 17 * Math.random()) * 3600 * 1000);
+			return Math.round((6 * 3600 * 1000 + 17 * Math.random() * 3600 * 1000));
 		},
 		run: function () {
 			clearTimeout(tools.flush.timid);
