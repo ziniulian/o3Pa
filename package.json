@@ -3,12 +3,7 @@
 	"version": "1.0.0",
 	"main": "index.js",
 	"dependencies": {
-		"express": "4.x",
-		"dot": "1.1.x",
-		"mongodb": "2.2.x",
-		"iconv-lite": "0.4.x",
-		"body-parser": "1.17.x",
-		"lzr": "~1.2.2"
+		"lzr": "~1.3.1"
 	},
 	"devDependencies": {},
 	"scripts": {

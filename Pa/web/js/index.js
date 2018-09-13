@@ -62,14 +62,33 @@ var dat = {
 
 		// 校验字
 		d = document.createElement("td");
-		d.innerHTML = o.nam;
+		switch (o.nam) {
+			case "Test":
+			case "Webp":
+			case "HKG":
+				s = document.createElement("a");
+				s.target = "_blank";
+				s.href = "https://" + o.url + "/DbMgr/v/qry_vs/";
+				s.innerHTML = o.nam;
+				d.appendChild(s);
+				break;
+			default:
+				d.innerHTML = o.nam;
+				break;
+		}
 		r.appendChild(d);
 
 		// 状态
 		d = document.createElement("td");
+		s = document.createElement("a");
+		s.href = "https://" + o.url + "/myNam/";
+		s.target = "_blank";
 		if (o.stu) {
-			d.innerHTML = o.stu;
+			s.innerHTML = o.stu;
+		} else {
+			s.innerHTML = "---";
 		}
+		d.appendChild(s);
 		r.appendChild(d);
 
 		// 时间
