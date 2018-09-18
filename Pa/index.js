@@ -103,6 +103,23 @@ var tools = {
 					fn();
 				}
 			}
+		},
+		autoStart: function () {	// 自动运行
+			var req = {};
+			cmdb.get(
+				req,
+				null,
+				function () {
+					if (req.qpobj.comDbSrvReturn.length > 0) {
+						tools.flush.urls = req.qpobj.comDbSrvReturn;
+						tools.flush.id = 0;
+						tools.flush.run();
+					}
+				},
+				{},
+				{"_id": 0},
+				true
+			);
 		}
 	}
 };
@@ -179,5 +196,7 @@ r.get("/v/flush/", function (req, res, next) {
 tools.tmpRo.initTmp("/v/");
 
 tools.tmpRo.initDms();
+
+tools.flush.autoStart();
 
 module.exports = r;
